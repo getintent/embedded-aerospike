@@ -1,0 +1,41 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    testNgVersion = "6.8.8"
+    slf4jVersion = "1.7.18"
+    dockerJavaVersion = "3.0.0-RC4"
+}
+
+dependencies {
+    compile "com.github.docker-java:docker-java:$dockerJavaVersion"
+    compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'com.google.guava:guava:11.0.2'
+    compile 'org.apache.commons:commons-exec:1.0.1'
+
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
+
+    testCompile 'com.aerospike:aerospike-client:3.1.2'
+    testCompile "org.testng:testng:$testNgVersion"
+}
+
+test {
+    useTestNG()
+    testLogging {
+        showStandardStreams = true
+        showExceptions = true
+        showStackTraces = true
+    }
+    // listen to events in the test execution lifecycle
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
+    }
+
+}

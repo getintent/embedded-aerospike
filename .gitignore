@@ -1,0 +1,22 @@
+# Build directories
+build
+
+# Idea files
+.idea
+*.iml
+*.ipr
+*.iws
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+#Mac OS specific files
+.DS_Store
+
+#Gradle
+.gradle
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
