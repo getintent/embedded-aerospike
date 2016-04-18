@@ -47,15 +47,14 @@ In `$HOME/.docker-java.properties` or in the class path at `/docker-java.propert
 ```
 ## Build
 
-```gradle
     ./gradlew build
-```
-## User Feedback
+    
+# User Feedback
 
-#Issues
+##Issues
 
 If you have any problems with or questions about this framework, please contact us through a GitHub issue.
 
-#Contributing
+##Contributing
 
 You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
