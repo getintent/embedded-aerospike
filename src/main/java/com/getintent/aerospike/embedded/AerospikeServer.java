@@ -21,8 +21,9 @@ import java.util.concurrent.TimeUnit;
 public class AerospikeServer implements Server {
     private static final Logger LOG = LoggerFactory.getLogger(AerospikeServer.class);
     private DockerClientConfig dockerConfig;
-    private DockerMachine dockerMachine;
     private DockerClient dockerClient;
+    private DockerMachineEnvironment environment;
+
     private TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(
             DockerClientBuilder.getDefaultDockerCmdExecFactory()
     );
@@ -44,7 +45,7 @@ public class AerospikeServer implements Server {
         this.aerospikePort = builder.aerospikePort;
         this.aerospikeConfPath = builder.aerospikeConfPath;
         this.dockerConfig = builder.dockerConfig;
-        this.dockerMachine = builder.dockerMachine;
+        this.environment = builder.environment;
     }
 
     public HostAndPort getHostAndPort() {
@@ -77,11 +78,11 @@ public class AerospikeServer implements Server {
     }
 
     private void setupDockerClient() throws Exception {
-        if (dockerMachine != null) {
+        if (environment != null) {
             dockerConfig = DockerClientConfig.createDefaultConfigBuilder()
-                    .withDockerCertPath(dockerMachine.getDockerCertPath())
-                    .withDockerTlsVerify(dockerMachine.getDockerTlsVerify())
-                    .withDockerHost(dockerMachine.getDockerHost()).build();
+                    .withDockerCertPath(environment.getDockerCertPath())
+                    .withDockerTlsVerify(environment.getDockerTlsVerify())
+                    .withDockerHost(environment.getDockerHost()).build();
             dockerClient = DockerClientBuilder.getInstance(this.dockerConfig)
                     .withDockerCmdExecFactory(dockerCmdExecFactory)
                     .build();
@@ -102,7 +103,7 @@ public class AerospikeServer implements Server {
 
     public static class Builder {
         private DockerClientConfig dockerConfig;
-        private DockerMachine dockerMachine;
+        private DockerMachineEnvironment environment;
         private int aerospikePort = Utils.findFreePort();
         private String aerospikeConfPath;
 
@@ -122,17 +123,17 @@ public class AerospikeServer implements Server {
             return this;
         }
 
-        public Builder dockerMachine(DockerMachine dockerMachine) {
-            this.dockerMachine = Objects.requireNonNull(dockerMachine);
+        public Builder dockerMachineEnvironment(DockerMachineEnvironment environment) {
+            this.environment = Objects.requireNonNull(environment);
             return this;
         }
 
         public AerospikeServer build() {
             Preconditions.checkNotNull(aerospikeConfPath, "You should set aerospike configuration file path first");
-            if (dockerConfig == null && dockerMachine == null) {
+            if (dockerConfig == null && environment == null) {
                 throw new IllegalArgumentException("Either Docker configuration or Docker Machine configuration should be present");
             }
-            if (dockerConfig != null && dockerMachine != null) {
+            if (dockerConfig != null && environment != null) {
                 throw new IllegalArgumentException("Your should specify only Docker or only Docker Machine configuration");
             }
             return new AerospikeServer(this);

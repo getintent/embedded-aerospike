@@ -6,6 +6,7 @@ import com.google.common.net.HostAndPort;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 public class AerospikeServerTestWithDockerMachine extends AerospikeServerTestWithDocker {
 
@@ -21,12 +22,18 @@ public class AerospikeServerTestWithDockerMachine extends AerospikeServerTestWit
     public void setUp() throws Exception {
         aerospikeServer = AerospikeServer.builder()
                 .aerospikeConfPath(getClass().getResource("/aerospike.conf").getFile())
-                .dockerMachine(dockerMachine)
+                .dockerMachineEnvironment(dockerMachine.getEnvironment())
                 .build();
         aerospikeServer.start();
         HostAndPort hostAndPort = aerospikeServer.getHostAndPort();
         aerospikeClient = new SimpleAerospikeClient(
                 new AerospikeClient(hostAndPort.getHostText(), hostAndPort.getPort())
         );
+    }
+
+    @Test(enabled = false)
+    @Override
+    public void testAerospikeWithDocker() {
+        super.testAerospikeWithDocker();
     }
 }

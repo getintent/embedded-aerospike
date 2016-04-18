@@ -4,6 +4,8 @@ import com.aerospike.client.AerospikeClient;
 import com.getintent.aerospike.client.SimpleAerospikeClient;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.google.common.net.HostAndPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -15,11 +17,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 public class AerospikeServerTestWithDocker {
+    private static Logger LOG = LoggerFactory.getLogger(AerospikeServerTestWithDocker.class);
+
     protected AerospikeServer aerospikeServer;
     protected SimpleAerospikeClient aerospikeClient;
 
     @BeforeMethod
     public void setUp() throws Exception {
+        LOG.info("Setup aerospike server...");
         aerospikeServer = AerospikeServer.builder()
                 .aerospikeConfPath(getClass().getResource("/aerospike.conf").getFile())
                 .dockerConfig(DockerClientConfig.createDefaultConfigBuilder().build())
@@ -32,7 +37,8 @@ public class AerospikeServerTestWithDocker {
     }
 
     @Test
-    public void test() {
+    public void testAerospikeWithDocker() {
+        LOG.info("Start AerospikeWithDocker Test");
         long userId = ThreadLocalRandom.current().nextLong();
 
         aerospikeClient.addSegments(userId, new HashSet<Integer>() {{
@@ -57,6 +63,7 @@ public class AerospikeServerTestWithDocker {
 
     @AfterMethod
     public void tearDown() throws Exception {
+        LOG.info("Tear Down, stop aerospike server");
         aerospikeServer.stop();
     }
 

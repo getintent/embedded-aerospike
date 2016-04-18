@@ -15,6 +15,21 @@ public class AerospikeConfigurationTest {
         AerospikeServer.builder()
                 .aerospikeConfPath(getClass().getResource("/aerospike.conf").getFile())
                 .dockerConfig(DockerClientConfig.createDefaultConfigBuilder().build())
-                .dockerMachine(DockerMachine.builder().buildAndStart()).build();
+                .dockerMachineEnvironment(new DockerMachineEnvironment() {
+                    @Override
+                    public String getDockerHost() {
+                        return null;
+                    }
+
+                    @Override
+                    public String getDockerCertPath() {
+                        return null;
+                    }
+
+                    @Override
+                    public String getDockerTlsVerify() {
+                        return null;
+                    }
+                }).build();
     }
 }

@@ -81,16 +81,23 @@ public class DockerMachine {
         }
     }
 
-    public String getDockerHost() {
-        return dockerHost;
-    }
+    public DockerMachineEnvironment getEnvironment() {
+        return new DockerMachineEnvironment() {
+            @Override
+            public String getDockerHost() {
+                return dockerHost;
+            }
 
-    public String getDockerCertPath() {
-        return dockerCertPath;
-    }
+            @Override
+            public String getDockerCertPath() {
+                return dockerCertPath;
+            }
 
-    public String getDockerTlsVerify() {
-        return dockerTlsVerify;
+            @Override
+            public String getDockerTlsVerify() {
+                return dockerTlsVerify;
+            }
+        };
     }
 
     public static Builder builder() {
