@@ -6,12 +6,12 @@ We use [Java API client for Docker](https://github.com/docker-java/docker-java "
 ## Configuration
 
 In your application, e.g.
-
+```java
     aerospikeServer = AerospikeServer.builder()
                 .aerospikeConfPath(/path/to/aerospike.conf)
                 .dockerConfig(DockerClientConfig.createDefaultConfigBuilder().build())
                 .build();
-
+```
 AerospikeServer uses DockerClientConfig to build docker client.
 There are three ways to configure DockerClientConfig. See [Java API client documentation](https://github.com/docker-java/docker-java/blob/master/README.md "Java API client documentation")
 
@@ -25,7 +25,7 @@ For example, if you use Docker Machine on Mac OS you can put
 In `$HOME/.docker-java.properties` or in the class path at `/docker-java.properties`
 
 ## Usage example in tests
-
+```java
     @BeforeMethod
     public void setUp() throws Exception {
         aerospikeServer = AerospikeServer.builder()
@@ -44,3 +44,4 @@ In `$HOME/.docker-java.properties` or in the class path at `/docker-java.propert
     public void tearDown() throws Exception {
         aerospikeServer.stop();
     }
+```
