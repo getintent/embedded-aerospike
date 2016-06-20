@@ -1,3 +1,13 @@
+This project is inactive, if you want full-featured docker container test framework, we recommend [testcontainers-java](https://github.com/testcontainers/testcontainers-java "testcontainers-java")
+
+Exmaple of usage:
+
+```java
+ public static GenericContainer aerosike =
+            new GenericContainer("aerospike:latest")
+                    .withExposedPorts(3000)
+                    .withClasspathResourceMapping("aerospike.conf", "/etc/aerospike/aerospike.conf", BindMode.READ_ONLY);
+```
 # embedded-aerospike
 Aerospike embedded server built on top of Docker container for Java integration testing.
 
